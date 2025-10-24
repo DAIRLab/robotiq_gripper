@@ -1,0 +1,35 @@
+load("@rules_cc//cc:defs.bzl", "cc_library", "cc_binary", "cc_test")
+load("@rules_python//python:defs.bzl", "py_library", "py_binary", "py_test")
+load("@pybind11_bazel//:build_defs.bzl", "pybind_extension")
+
+# C++ library for the Robotiq gripper driver
+cc_library(
+    name = "robotiq_gripper",
+    srcs = ["src/robotiq_gripper.cc"],
+    hdrs = ["src/robotiq_gripper.h"],
+    visibility = ["//visibility:public"],
+    deps = [],
+)
+
+# Python bindings using pybind11
+pybind_extension(
+    name = "robotiq_cpp",
+    srcs = ["src/bindings/robotiq_py.cpp"],
+    deps = [":robotiq_gripper"],
+    visibility = ["//visibility:public"],
+)
+
+# Python library that includes the compiled extension
+py_library(
+    name = "robotiq_py",
+    srcs = ["src/bindings/__init__.py"],
+    data = [":robotiq_cpp.so"],
+    imports = ["src/bindings"],
+    visibility = ["//visibility:public"],
+)
+
+py_binary(
+    name = "test_driver",
+    srcs = ["tests/test_driver.py"], # A simple script to launch IPython
+    deps = [":robotiq_py"],
+)
