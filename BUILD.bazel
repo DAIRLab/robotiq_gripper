@@ -9,6 +9,7 @@ cc_library(
     hdrs = ["src/robotiq_gripper.h"],
     visibility = ["//visibility:public"],
     deps = [],
+    includes = ["src"],
 )
 
 # Python bindings using pybind11

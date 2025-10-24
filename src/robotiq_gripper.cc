@@ -9,9 +9,11 @@
 #include <sstream>
 #include <thread>
 
+#define MAXIMUM_DEFAULT_BLOCKING_TIMEOUT_SEC 2
+
 using namespace std;
 
-namespace drivers {
+namespace driver {
 namespace robotiq {
 
 // RobotiqGripper constructor
@@ -230,6 +232,24 @@ int RobotiqGripper::getCurrentPosition() const {
   return getIntValue(RobotiqCommand::POSITION);
 }
 
+bool RobotiqGripper::IsFaulted() const {
+  if (!connected_) {
+    std::cerr << "Not connected to gripper" << std::endl;
+    return true;
+  }
+
+  auto fault_status = getIntValue(RobotiqCommand::FAULT_STATUS);
+  if (fault_status == 0) {
+    std::cout << "No faults to reset." << std::endl;
+    return false;
+  }
+
+  std::cout << "Current fault status: " << fault_status
+            << "Resetting faults on Robotiq gripper..." << std::endl;
+
+  return true;
+}
+
 // Private helper: Send command and receive response
 std::string RobotiqGripper::sendCommand(const std::string& command) const {
   if (send(socket_fd_, command.c_str(), command.length(), 0) < 0) {
@@ -285,23 +305,26 @@ bool RobotiqGripper::commandIsWriteable(RobotiqCommand cmd) const {
   }
 }
 
-void RobotiqGripper::blockUntilStatus(RobotiqCommand cmd,
-                                         int desired_status, bool set) {
-  // Poll until status is first cleared, then set
+void RobotiqGripper::blockUntilStatus(RobotiqCommand cmd, int desired_status,
+                                      bool set) {
+  // Poll until status is first cleared[set], then set[cleared]
   auto start = std::chrono::steady_clock::now();
-  // Wait for status to clear
+  // Wait for status to clear[set]
   if ((getIntValue(cmd) == desired_status) == set) {
     while (std::chrono::steady_clock::now() - start <
-           std::chrono::seconds(timeout_ > 0 ? timeout_ : 10)) {
+           std::chrono::seconds(timeout_ > 0
+                                    ? timeout_
+                                    : MAXIMUM_DEFAULT_BLOCKING_TIMEOUT_SEC)) {
       if ((getIntValue(cmd) == desired_status) != set) {
         break;
       }
       std::this_thread::sleep_for(std::chrono::milliseconds(poll_interval_));
     }
   }
-  // Wait for status to set
+  // Wait for status to set[cleared]
   while (std::chrono::steady_clock::now() - start <
-         std::chrono::seconds(timeout_ > 0 ? timeout_ : 10)) {
+         std::chrono::seconds(
+             timeout_ > 0 ? timeout_ : MAXIMUM_DEFAULT_BLOCKING_TIMEOUT_SEC)) {
     if ((getIntValue(cmd) == desired_status) == set) {
       break;
     }
