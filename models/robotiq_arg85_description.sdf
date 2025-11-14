@@ -1,0 +1,497 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!--
+  SDF file for Robotiq 85 Gripper converted from URDF
+  Generated from robotiq_arg85_description.urdf
+  
+  This SDF file describes the complete Robotiq 85 gripper with all links,
+  joints, inertial properties, visual and collision geometries.
+-->
+<sdf version="1.7">
+  <model name="robotiq_gripper_85">
+    
+    <!-- Base link of the gripper -->
+    <link name="robotiq_85_base_link">
+      <pose>0 0 0 0 0 0</pose>
+      <inertial>
+        <pose>0.00021987 -2.3546E-10 0.030163 0 0 0</pose>
+        <mass>0.30915</mass>
+        <inertia>
+          <ixx>0.00028972</ixx>
+          <ixy>-5.7879E-10</ixy>
+          <ixz>-1.8543E-06</ixz>
+          <iyy>0.00030737</iyy>
+          <iyz>1.682E-12</iyz>
+          <izz>0.00019914</izz>
+        </inertia>
+      </inertial>
+      
+      <visual name="visual">
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <uri>meshes/robotiq_85_base_link_fine.obj</uri>
+          </mesh>
+        </geometry>
+        <material>
+          <ambient>0.1 0.1 0.1 1</ambient>
+          <diffuse>0.1 0.1 0.1 1</diffuse>
+          <specular>0.2 0.2 0.2 1</specular>
+        </material>
+      </visual>
+      
+      <collision name="collision">
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <uri>meshes/robotiq_85_base_link_coarse.obj</uri>
+          </mesh>
+        </geometry>
+      </collision>
+    </link>
+    
+    <!-- Left outer knuckle -->
+    <link name="left_outer_knuckle">
+      <pose>0.0306011444260539 0 0.0627920162695395 0 0 0</pose>
+      <inertial>
+        <pose>0.0178331863169983 3.68915177224286E-11 0.0021442477325704 0 0 0</pose>
+        <mass>0.00684838849434396</mass>
+        <inertia>
+          <ixx>2.66832029033166E-07</ixx>
+          <ixy>1.66142314639824E-15</ixy>
+          <ixz>1.45945633322873E-07</ixz>
+          <iyy>1.3889233257419E-06</iyy>
+          <iyz>2.82951161241588E-15</iyz>
+          <izz>1.26603336914415E-06</izz>
+        </inertia>
+      </inertial>
+      
+      <visual name="visual">
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <uri>meshes/outer_knuckle_fine.obj</uri>
+          </mesh>
+        </geometry>
+        <material>
+          <ambient>0.1 0.1 0.1 1</ambient>
+          <diffuse>0.1 0.1 0.1 1</diffuse>
+          <specular>0.2 0.2 0.2 1</specular>
+        </material>
+      </visual>
+      
+      <collision name="collision">
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <uri>meshes/outer_knuckle_coarse.obj</uri>
+          </mesh>
+        </geometry>
+      </collision>
+    </link>
+    
+    <!-- Main finger joint (primary actuated joint) -->
+    <joint name="finger_joint" type="revolute">
+      <pose>0 0 0 0 0 0</pose>
+      <parent>robotiq_85_base_link</parent>
+      <child>left_outer_knuckle</child>
+      <axis>
+        <xyz>0 -1 0</xyz>
+        <limit>
+          <lower>0</lower>
+          <upper>0.725</upper>
+          <velocity>2.0</velocity>
+          <effort>1000</effort>
+        </limit>
+        <dynamics>
+          <damping>0.1</damping>
+          <friction>0.1</friction>
+        </dynamics>
+      </axis>
+    </joint>
+    
+    <!-- Left outer finger -->
+    <link name="left_outer_finger">
+      <pose>0.062292188669718 0 0.0608580525123135 0 0 0</pose>
+      <inertial>
+        <pose>0.00131451599174296 2.88942057994543E-15 0.0215404163180413 0 0 0</pose>
+        <mass>0.0273093985570947</mass>
+        <inertia>
+          <ixx>8.51629628283022E-06</ixx>
+          <ixy>2.58174336207405E-19</ixy>
+          <ixz>3.83829504344079E-07</ixz>
+          <iyy>6.9133328065108E-06</iyy>
+          <iyz>-7.58589926143789E-19</iyz>
+          <izz>2.25006832221981E-06</izz>
+        </inertia>
+      </inertial>
+      
+      <visual name="visual">
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <uri>meshes/outer_finger_fine.obj</uri>
+          </mesh>
+        </geometry>
+        <material>
+          <ambient>0.1 0.1 0.1 1</ambient>
+          <diffuse>0.1 0.1 0.1 1</diffuse>
+          <specular>0.2 0.2 0.2 1</specular>
+        </material>
+      </visual>
+      
+      <collision name="collision">
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <uri>meshes/outer_finger_coarse.obj</uri>
+          </mesh>
+        </geometry>
+      </collision>
+    </link>
+    
+    <!-- Left outer finger joint (fixed) -->
+    <joint name="left_outer_finger_joint" type="fixed">
+      <pose>0 0 0 0 0 0</pose>
+      <parent>left_outer_knuckle</parent>
+      <child>left_outer_finger</child>
+    </joint>
+    
+    <!-- Left inner knuckle -->
+    <link name="left_inner_knuckle">
+      <pose>0.0127000000001501 0 0.0693074999999639 0 0 0</pose>
+      <inertial>
+        <pose>0.0168606186773776 3.93808471820465E-10 0.0226699950793434 0 0 0</pose>
+        <mass>0.0110930853895903</mass>
+        <inertia>
+          <ixx>4.27134775939882E-06</ixx>
+          <ixy>-8.53568456728898E-15</ixy>
+          <ixz>1.77774229944246E-06</ixz>
+          <iyy>3.96548790524392E-06</iyy>
+          <iyz>-8.45108024914164E-15</iyz>
+          <izz>3.20325997634666E-06</izz>
+        </inertia>
+      </inertial>
+      
+      <visual name="visual">
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <uri>meshes/inner_knuckle_fine.obj</uri>
+          </mesh>
+        </geometry>
+        <material>
+          <ambient>0.1 0.1 0.1 1</ambient>
+          <diffuse>0.1 0.1 0.1 1</diffuse>
+          <specular>0.2 0.2 0.2 1</specular>
+        </material>
+      </visual>
+      
+      <collision name="collision">
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <uri>meshes/inner_knuckle_coarse.obj</uri>
+          </mesh>
+        </geometry>
+      </collision>
+    </link>
+    
+    <!-- Left inner knuckle joint -->
+    <joint name="left_inner_knuckle_joint" type="revolute">
+      <pose>0 0 0 0 0 0</pose>
+      <parent>robotiq_85_base_link</parent>
+      <child>left_inner_knuckle</child>
+      <axis>
+        <xyz>0 -1 0</xyz>
+        <limit>
+          <lower>0</lower>
+          <upper>0.8757</upper>
+          <velocity>2.0</velocity>
+          <effort>0</effort>
+        </limit>
+        <dynamics>
+          <damping>0.1</damping>
+          <friction>0.1</friction>
+        </dynamics>
+      </axis>
+      <drake:mimic joint="finger_joint" multiplier="1" offset="0"/>
+    </joint>
+    
+    <!-- Left inner finger -->
+    <link name="left_inner_finger">
+      <pose>0.047285310862444 0 0.1148045193817614 0 0 0</pose>
+      <inertial>
+        <pose>0.00602756228812038 -6.47284509480176E-15 0.00669925609578108 0 0 0</pose>
+        <mass>0.00724255346165744</mass>
+        <inertia>
+          <ixx>1.47824283625957E-06</ixx>
+          <ixy>-3.95952064019123E-19</ixy>
+          <ixz>1.80452387179145E-07</ixz>
+          <iyy>9.81964343679842E-07</iyy>
+          <iyz>1.39681001690899E-18</iyz>
+          <izz>7.70370391807832E-07</izz>
+        </inertia>
+      </inertial>
+      
+      <visual name="visual">
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <uri>meshes/inner_finger_fine.obj</uri>
+          </mesh>
+        </geometry>
+        <material>
+          <ambient>0.1 0.1 0.1 1</ambient>
+          <diffuse>0.1 0.1 0.1 1</diffuse>
+          <specular>0.2 0.2 0.2 1</specular>
+        </material>
+      </visual>
+      
+      <collision name="collision">
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <uri>meshes/inner_finger_coarse.obj</uri>
+          </mesh>
+        </geometry>
+      </collision>
+    </link>
+    
+    <!-- Left inner finger joint -->
+    <joint name="left_inner_finger_joint" type="revolute">
+      <pose>0 0 0 0 0 0</pose>
+      <parent>left_inner_knuckle</parent>
+      <child>left_inner_finger</child>
+      <drake:mimic joint="finger_joint" multiplier="-1" offset="0"/>
+      <axis>
+        <xyz>0 -1 0</xyz>
+        <limit>
+          <effort>0</effort>
+        </limit>
+      </axis>
+    </joint>
+
+    <joint name="left_inner_finger_outer_joint" type="revolute">
+      <pose>0.018 -0.00515 0 0 0 0</pose>
+      <parent>left_inner_finger</parent>
+      <child>left_outer_knuckle</child>
+      <drake:mimic joint="finger_joint" multiplier="-1" offset="0"/>
+      <axis>
+        <xyz>0 -1 0</xyz>
+        <limit>
+          <effort>0</effort>
+        </limit>
+      </axis>
+    </joint>
+    
+    <!-- Right outer knuckle -->
+    <link name="right_outer_knuckle">
+      <pose>-0.0306011444258893 0 0.0627920162695395 0 0 3.14159265358979</pose>
+      <inertial>
+        <pose>0.0178331863169983 3.68915177224286E-11 0.0021442477325704 0 0 0</pose>
+        <mass>0.00684838849434396</mass>
+        <inertia>
+          <ixx>2.66832029033166E-07</ixx>
+          <ixy>1.66142314639824E-15</ixy>
+          <ixz>1.45945633322873E-07</ixz>
+          <iyy>1.3889233257419E-06</iyy>
+          <iyz>2.82951161241588E-15</iyz>
+          <izz>1.26603336914415E-06</izz>
+        </inertia>
+      </inertial>
+      
+      <visual name="visual">
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <uri>meshes/outer_knuckle_fine.obj</uri>
+          </mesh>
+        </geometry>
+        <material>
+          <ambient>0.1 0.1 0.1 1</ambient>
+          <diffuse>0.1 0.1 0.1 1</diffuse>
+          <specular>0.2 0.2 0.2 1</specular>
+        </material>
+      </visual>
+      
+      <collision name="collision">
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <uri>meshes/outer_knuckle_coarse.obj</uri>
+          </mesh>
+        </geometry>
+      </collision>
+    </link>
+    
+    <!-- Right outer knuckle joint -->
+    <joint name="right_outer_knuckle_joint" type="revolute">
+      <pose>0 0 0 0 0 0</pose>
+      <parent>robotiq_85_base_link</parent>
+      <child>right_outer_knuckle</child>
+      <axis>
+        <xyz>0 1 0</xyz>
+        <limit>
+          <effort>0</effort>
+        </limit>
+      </axis>
+      <drake:mimic joint="finger_joint" multiplier="-1" offset="0"/>
+    </joint>
+    
+    <!-- Right outer finger -->
+    <link name="right_outer_finger">
+      <pose>-0.062310735362614 0 0.0611906597740708 0 0 3.14159265358979</pose>
+      <inertial>
+        <pose>0.00108844269639009 -2.611488350845E-15 0.0215530225245502 0 0 0</pose>
+        <mass>0.0273093985570947</mass>
+        <inertia>
+          <ixx>8.52366028592721E-06</ixx>
+          <ixy>3.41683380899422E-19</ixy>
+          <ixz>3.18003675694284E-07</ixz>
+          <iyy>6.91333280651081E-06</iyy>
+          <iyz>7.37726682706417E-19</iyz>
+          <izz>2.24270431912283E-06</izz>
+        </inertia>
+      </inertial>
+      
+      <visual name="visual">
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <uri>meshes/outer_finger_fine.obj</uri>
+          </mesh>
+        </geometry>
+        <material>
+          <ambient>0.1 0.1 0.1 1</ambient>
+          <diffuse>0.1 0.1 0.1 1</diffuse>
+          <specular>0.2 0.2 0.2 1</specular>
+        </material>
+      </visual>
+      
+      <collision name="collision">
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <uri>meshes/outer_finger_coarse.obj</uri>
+          </mesh>
+        </geometry>
+      </collision>
+    </link>
+    
+    <!-- Right outer finger joint (fixed) -->
+    <joint name="right_outer_finger_joint" type="fixed">
+      <pose>0 0 0 0 0 0</pose>
+      <parent>right_outer_knuckle</parent>
+      <child>right_outer_finger</child>
+    </joint>
+    
+    <!-- Right inner knuckle -->
+    <link name="right_inner_knuckle">
+      <pose>-0.0126999999998499 0 0.0693075000000361 0 0 3.14159265358979</pose>
+      <inertial>
+        <pose>0.0168606186773776 3.93808471820465E-10 0.0226699950793434 0 0 0</pose>
+        <mass>0.0110930853895903</mass>
+        <inertia>
+          <ixx>4.27134775939882E-06</ixx>
+          <ixy>-8.53568456728898E-15</ixy>
+          <ixz>1.77774229944246E-06</ixz>
+          <iyy>3.96548790524392E-06</iyy>
+          <iyz>-8.45108024914164E-15</iyz>
+          <izz>3.20325997634666E-06</izz>
+        </inertia>
+      </inertial>
+      
+      <visual name="visual">
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <uri>meshes/inner_knuckle_fine.obj</uri>
+          </mesh>
+        </geometry>
+        <material>
+          <ambient>0.1 0.1 0.1 1</ambient>
+          <diffuse>0.1 0.1 0.1 1</diffuse>
+          <specular>0.2 0.2 0.2 1</specular>
+        </material>
+      </visual>
+      
+      <collision name="collision">
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <uri>meshes/inner_knuckle_coarse.obj</uri>
+          </mesh>
+        </geometry>
+      </collision>
+    </link>
+    
+    <!-- Right inner knuckle joint -->
+    <joint name="right_inner_knuckle_joint" type="revolute">
+      <pose>0 0 0 0 0 0</pose>
+      <parent>robotiq_85_base_link</parent>
+      <child>right_inner_knuckle</child>
+      <axis>
+        <xyz>0 1 0</xyz>
+        <limit>
+          <effort>0</effort>
+        </limit>
+      </axis>
+      <drake:mimic joint="finger_joint" multiplier="-1" offset="0"/>
+    </joint>
+    
+    <!-- Right inner finger -->
+    <link name="right_inner_finger">
+      <pose>-0.047406047545241 0 0.1151648878542049 0 0 3.14159265358979</pose>
+      <inertial>
+        <pose>0.00602756228812038 -6.47284509480176E-15 0.00669925609578108 0 0 0</pose>
+        <mass>0.00724255346165744</mass>
+        <inertia>
+          <ixx>1.47824283625957E-06</ixx>
+          <ixy>-3.95952064019123E-19</ixy>
+          <ixz>1.80452387179145E-07</ixz>
+          <iyy>9.81964343679842E-07</iyy>
+          <iyz>1.39681001690899E-18</iyz>
+          <izz>7.70370391807832E-07</izz>
+        </inertia>
+      </inertial>
+      
+      <visual name="visual">
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <uri>meshes/inner_finger_fine.obj</uri>
+          </mesh>
+        </geometry>
+        <material>
+          <ambient>0.1 0.1 0.1 1</ambient>
+          <diffuse>0.1 0.1 0.1 1</diffuse>
+          <specular>0.2 0.2 0.2 1</specular>
+        </material>
+      </visual>
+      
+      <collision name="collision">
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <uri>meshes/inner_finger_coarse.obj</uri>
+          </mesh>
+        </geometry>
+      </collision>
+    </link>
+    
+    <!-- Right inner finger joint -->
+    <joint name="right_inner_finger_joint" type="revolute">
+      <pose>0.034585310861294 0 0.0454970193817975 0 0 0</pose>
+      <parent>right_inner_knuckle</parent>
+      <child>right_inner_finger</child>
+      <axis>
+        <xyz>0 1 0</xyz>
+        <limit>
+          <effort>0</effort>
+        </limit>
+      </axis>
+      <drake:mimic joint="finger_joint" multiplier="-1" offset="0"/>
+    </joint>
+    
+  </model>
+</sdf>
