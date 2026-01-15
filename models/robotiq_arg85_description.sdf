@@ -6,7 +6,7 @@
   This SDF file describes the complete Robotiq 85 gripper with all links,
   joints, inertial properties, visual and collision geometries.
 -->
-<sdf version="1.7">
+<sdf version="1.7" xmlns:drake="http://drake.mit.edu">
   <model name="robotiq_gripper_85">
     
     <!-- Base link of the gripper -->
@@ -91,21 +91,21 @@
     
     <!-- Main finger joint (primary actuated joint) -->
     <joint name="finger_joint" type="revolute">
-      <pose>0 0 0 0 0 0</pose>
+      <pose>0 0 0 0 0 3.14159265359</pose>
       <parent>robotiq_85_base_link</parent>
       <child>left_outer_knuckle</child>
       <axis>
-        <xyz>0 -1 0</xyz>
+        <xyz>0 1 0</xyz>
         <limit>
           <lower>0</lower>
           <upper>0.725</upper>
           <velocity>2.0</velocity>
-          <effort>1000</effort>
+          <effort>10</effort>
         </limit>
-        <dynamics>
+        <!-- <dynamics>
           <damping>0.1</damping>
           <friction>0.1</friction>
-        </dynamics>
+        </dynamics> -->
       </axis>
     </joint>
     
@@ -151,7 +151,7 @@
     
     <!-- Left outer finger joint (fixed) -->
     <joint name="left_outer_finger_joint" type="fixed">
-      <pose>0 0 0 0 0 0</pose>
+      <pose>0.0316910442266543 0 -0.00193396375724605 0 0 0</pose>
       <parent>left_outer_knuckle</parent>
       <child>left_outer_finger</child>
     </joint>
@@ -198,23 +198,23 @@
     
     <!-- Left inner knuckle joint -->
     <joint name="left_inner_knuckle_joint" type="revolute">
-      <pose>0 0 0 0 0 0</pose>
+      <pose>0 0 0 0 0 3.14159265359</pose>
       <parent>robotiq_85_base_link</parent>
       <child>left_inner_knuckle</child>
       <axis>
-        <xyz>0 -1 0</xyz>
+        <xyz>0 1 0</xyz>
         <limit>
           <lower>0</lower>
           <upper>0.8757</upper>
           <velocity>2.0</velocity>
-          <effort>0</effort>
+          <effort>100</effort>
         </limit>
-        <dynamics>
+        <!-- <dynamics>
           <damping>0.1</damping>
           <friction>0.1</friction>
-        </dynamics>
+        </dynamics> -->
       </axis>
-      <drake:mimic joint="finger_joint" multiplier="1" offset="0"/>
+      <!-- <drake:mimic joint="finger_joint" multiplier="1" offset="0"/> -->
     </joint>
     
     <!-- Left inner finger -->
@@ -262,16 +262,19 @@
       <pose>0 0 0 0 0 0</pose>
       <parent>left_inner_knuckle</parent>
       <child>left_inner_finger</child>
-      <drake:mimic joint="finger_joint" multiplier="-1" offset="0"/>
+      <!-- <drake:mimic joint="finger_joint" multiplier="1" offset="0"/> -->
       <axis>
-        <xyz>0 -1 0</xyz>
+        <xyz>0 1 0</xyz>
         <limit>
-          <effort>0</effort>
+          <lower>0</lower>
+          <upper>0.8757</upper>
+          <velocity>2.0</velocity>
+          <effort>10</effort>
         </limit>
       </axis>
     </joint>
 
-    <joint name="left_inner_finger_outer_joint" type="revolute">
+    <!-- <joint name="left_inner_finger_outer_joint" type="revolute">
       <pose>0.018 -0.00515 0 0 0 0</pose>
       <parent>left_inner_finger</parent>
       <child>left_outer_knuckle</child>
@@ -282,7 +285,7 @@
           <effort>0</effort>
         </limit>
       </axis>
-    </joint>
+    </joint> -->
     
     <!-- Right outer knuckle -->
     <link name="right_outer_knuckle">
@@ -326,16 +329,19 @@
     
     <!-- Right outer knuckle joint -->
     <joint name="right_outer_knuckle_joint" type="revolute">
-      <pose>0 0 0 0 0 0</pose>
+      <pose>0 0 0 0 0 3.14159265359</pose>
       <parent>robotiq_85_base_link</parent>
       <child>right_outer_knuckle</child>
       <axis>
         <xyz>0 1 0</xyz>
         <limit>
-          <effort>0</effort>
+          <lower>0</lower>
+          <upper>0.8757</upper>
+          <velocity>2.0</velocity>
+          <effort>10</effort>
         </limit>
       </axis>
-      <drake:mimic joint="finger_joint" multiplier="-1" offset="0"/>
+      <!-- <drake:mimic joint="finger_joint" multiplier="1" offset="0"/> -->
     </joint>
     
     <!-- Right outer finger -->
@@ -427,16 +433,19 @@
     
     <!-- Right inner knuckle joint -->
     <joint name="right_inner_knuckle_joint" type="revolute">
-      <pose>0 0 0 0 0 0</pose>
+      <pose>0 0 0 0 0 3.14159265359</pose>
       <parent>robotiq_85_base_link</parent>
       <child>right_inner_knuckle</child>
       <axis>
         <xyz>0 1 0</xyz>
         <limit>
-          <effort>0</effort>
+          <lower>0</lower>
+          <upper>0.8757</upper>
+          <velocity>2.0</velocity>
+          <effort>10</effort>
         </limit>
       </axis>
-      <drake:mimic joint="finger_joint" multiplier="-1" offset="0"/>
+      <!-- <drake:mimic joint="finger_joint" multiplier="1" offset="0"/> -->
     </joint>
     
     <!-- Right inner finger -->
@@ -481,17 +490,35 @@
     
     <!-- Right inner finger joint -->
     <joint name="right_inner_finger_joint" type="revolute">
-      <pose>0.034585310861294 0 0.0454970193817975 0 0 0</pose>
+      <pose>0 0 0 0 0 0</pose>
       <parent>right_inner_knuckle</parent>
       <child>right_inner_finger</child>
       <axis>
         <xyz>0 1 0</xyz>
         <limit>
-          <effort>0</effort>
+          <lower>0</lower>
+          <upper>0.8757</upper>
+          <velocity>2.0</velocity>
+          <effort>10</effort>
         </limit>
       </axis>
-      <drake:mimic joint="finger_joint" multiplier="-1" offset="0"/>
+      <!-- <drake:mimic joint="finger_joint" multiplier="1" offset="0"/> -->
     </joint>
+
+  <drake:collision_filter_group name="left_finger">
+    <drake:member>left_outer_knuckle</drake:member>
+    <drake:member>left_inner_knuckle</drake:member>
+    <drake:member>left_outer_finger</drake:member>
+    <drake:member>left_inner_finger</drake:member>
+    <drake:ignored_collision_filter_group>left_finger</drake:ignored_collision_filter_group>
+  </drake:collision_filter_group>
+  <drake:collision_filter_group name="right_finger">
+    <drake:member>right_inner_knuckle</drake:member>
+    <drake:member>right_outer_knuckle</drake:member>
+    <drake:member>right_outer_finger</drake:member>
+    <drake:member>right_inner_finger</drake:member>
+    <drake:ignored_collision_filter_group>right_finger</drake:ignored_collision_filter_group>
+  </drake:collision_filter_group>
     
   </model>
 </sdf>
