@@ -1,0 +1,9 @@
+package robotiq;
+
+struct lcmt_robotiq_command
+{
+	int64_t utime;
+	byte speed; // 0-255
+	byte force; // 0-255
+	byte position; // 0-255
+}

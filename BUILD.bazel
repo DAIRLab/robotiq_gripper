@@ -12,6 +12,19 @@ cc_library(
     includes = ["src"],
 )
 
+cc_binary(
+    name = "drake_robotiq_driver",
+    srcs = ["src/drake/robotiq_driver.cc"],
+    deps = [
+        ":robotiq_gripper",
+        "//lcmtypes:lcmt_robotiq",
+        "@drake//common:common",
+        "@gflags",
+        "@lcm"
+    ],
+    visibility = ["//visibility:public"],
+)
+
 # Python bindings using pybind11
 pybind_extension(
     name = "robotiq_cpp",

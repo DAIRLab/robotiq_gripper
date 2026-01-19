@@ -1,0 +1,46 @@
+load(
+    "@drake//tools/workspace/lcm:lcm.bzl",
+    "lcm_cc_library",
+    "lcm_java_library",
+    "lcm_py_library",
+)
+load(
+    "@drake//tools/skylark:drake_java.bzl",
+    "drake_java_binary",
+)
+load("@drake//tools/lint:lint.bzl", "add_lint_tests")
+
+package(default_visibility = ["//visibility:public"])
+
+#Lcm libraries
+
+#Lcm libraries
+lcm_cc_library(
+    name = "lcmt_robotiq",
+    lcm_package = "robotiq",
+    lcm_srcs = glob(["*.lcm"], allow_empty = True),
+)
+
+lcm_java_library(
+    name = "lcmtypes_robotiq_java",
+    lcm_package = "robotiq",
+    lcm_srcs = glob(["*.lcm"], allow_empty = True),
+)
+
+lcm_py_library(
+    name = "lcmtypes_robotiq_py",
+    add_current_package_to_imports = True,  # Use //:module_py instead.
+    extra_srcs = ["__init__.py"],
+    lcm_package = "robotiq",
+    lcm_srcs = glob(["*.lcm"], allow_empty = True),
+)
+
+drake_java_binary(
+    name = "dair-lcm-spy",
+    main_class = "lcm.spy.Spy",
+    visibility = ["//visibility:private"],
+    runtime_deps = [
+        ":lcmtypes_robotiq_java",
+        "@drake//lcmtypes:lcmtypes_drake_java",
+    ],
+)

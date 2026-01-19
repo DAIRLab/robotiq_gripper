@@ -1,0 +1,12 @@
+package robotiq;
+
+struct lcmt_robotiq_status
+{
+	int64_t utime;
+	boolean activation_status; 
+    boolean gripper_mode;
+    boolean goto_status;
+	byte position; // 0-255
+	byte speed; // 0-255
+    byte force; // 0-255
+}
