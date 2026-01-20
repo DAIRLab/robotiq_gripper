@@ -1,0 +1,160 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!--
+  Simplified SDF file for Robotiq 85 Gripper with parallel fingers only
+  This version contains only the base link and left/right finger assemblies
+  for distance evaluation testing.
+-->
+<sdf version="1.7" xmlns:drake="http://drake.mit.edu">
+  <model name="robotiq_gripper_85">
+
+    <!-- Base link of the gripper -->
+    <link name="robotiq_85_base_link">
+      <pose>0 0 0 0 0 0</pose>
+      <inertial>
+        <pose>0.00021987 -2.3546E-10 0.030163 0 0 0</pose>
+        <mass>0.30915</mass>
+        <inertia>
+          <ixx>0.00028972</ixx>
+          <ixy>-5.7879E-10</ixy>
+          <ixz>-1.8543E-06</ixz>
+          <iyy>0.00030737</iyy>
+          <iyz>1.682E-12</iyz>
+          <izz>0.00019914</izz>
+        </inertia>
+      </inertial>
+
+      <visual name="visual">
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <uri>meshes/robotiq_85_base_link_fine.obj</uri>
+          </mesh>
+        </geometry>
+        <material>
+          <ambient>0.1 0.1 0.1 1</ambient>
+          <diffuse>0.1 0.1 0.1 1</diffuse>
+          <specular>0.2 0.2 0.2 1</specular>
+        </material>
+      </visual>
+
+      <collision name="collision">
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <uri>meshes/robotiq_85_base_link_coarse.obj</uri>
+          </mesh>
+        </geometry>
+      </collision>
+    </link>
+
+    <!-- Left finger assembly -->
+    <link name="left_finger">
+      <pose>0.047285310862444 0 0.1148045193817614 0 0 0</pose>
+      <inertial>
+        <pose>0.00602756228812038 -6.47284509480176E-15 0.00669925609578108 0 0 0</pose>
+        <mass>0.00724255346165744</mass>
+        <inertia>
+          <ixx>1.47824283625957E-06</ixx>
+          <ixy>-3.95952064019123E-19</ixy>
+          <ixz>1.80452387179145E-07</ixz>
+          <iyy>9.81964343679842E-07</iyy>
+          <iyz>1.39681001690899E-18</iyz>
+          <izz>7.70370391807832E-07</izz>
+        </inertia>
+      </inertial>
+
+      <visual name="visual">
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <uri>meshes/left_finger.obj</uri>
+          </mesh>
+        </geometry>
+        <material>
+          <ambient>1 0.5 0 1</ambient>
+          <diffuse>1 0.5 0 1</diffuse>
+          <specular>0.2 0.2 0.2 1</specular>
+        </material>
+      </visual>
+
+      <collision name="collision">
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <uri>meshes/left_finger.obj</uri>
+          </mesh>
+        </geometry>
+      </collision>
+    </link>
+
+    <!-- Left finger joint (primary actuated joint) -->
+    <joint name="left_finger_joint" type="prismatic">
+      <parent>robotiq_85_base_link</parent>
+      <child>left_finger</child>
+      <axis>
+        <xyz>-0.9589 0 0.2837</xyz>
+        <limit>
+          <lower>0.0</lower>
+          <upper>0.04588</upper>
+          <velocity>1.0</velocity>
+          <effort>100</effort>
+        </limit>
+      </axis>
+    </joint>
+
+    <!-- Right finger assembly -->
+    <link name="right_finger">
+      <pose>-0.047285310862444 0 0.1148045193817614 0 0 3.14159265358979</pose>
+      <inertial>
+        <pose>0.00602756228812038 -6.47284509480176E-15 0.00669925609578108 0 0 0</pose>
+        <mass>0.00724255346165744</mass>
+        <inertia>
+          <ixx>1.47824283625957E-06</ixx>
+          <ixy>-3.95952064019123E-19</ixy>
+          <ixz>1.80452387179145E-07</ixz>
+          <iyy>9.81964343679842E-07</iyy>
+          <iyz>1.39681001690899E-18</iyz>
+          <izz>7.70370391807832E-07</izz>
+        </inertia>
+      </inertial>
+
+      <visual name="visual">
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <uri>meshes/right_finger.obj</uri>
+          </mesh>
+        </geometry>
+        <material>
+          <ambient>1 0.5 0 1</ambient>
+          <diffuse>1 0.5 0 1</diffuse>
+          <specular>0.2 0.2 0.2 1</specular>
+        </material>
+      </visual>
+
+      <collision name="collision">
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <uri>meshes/right_finger.obj</uri>
+          </mesh>
+        </geometry>
+      </collision>
+    </link>
+
+    <!-- Right finger joint (mirrored prismatic) -->
+    <joint name="right_finger_joint" type="prismatic">
+      <parent>robotiq_85_base_link</parent>
+      <child>right_finger</child>
+      <axis>
+        <xyz>-0.9589 0 0.2837</xyz>
+        <limit>
+          <lower>0.0</lower>
+          <upper>0.04588</upper>
+          <velocity>1.0</velocity>
+          <effort>100</effort>
+        </limit>
+      </axis>
+    </joint>
+  </model>
+</sdf>
