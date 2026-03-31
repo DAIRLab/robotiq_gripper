@@ -48,7 +48,10 @@ build --action_env=CCACHE_DISABLE=1
 build --action_env=PATH=/usr/bin:/bin
 build --action_env=LD_LIBRARY_PATH=
 
+# required on MacOS
+build --java_runtime_version=remotejdk_11
+
 # use python3 by default
 build --python_path=python3
 
-build --define=WITH_GUROBI=ON
+build --define=WITH_GUROBI=OFF
