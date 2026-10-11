@@ -14,7 +14,7 @@
 #include <iostream>
 #include <stdexcept>
 #include <string>
-
+#include <mutex>
 #include <optional>
 
 /* Default port for Robotiq gripper communication */
@@ -282,6 +282,8 @@ class RobotiqGripper {
   int socket_fd_;          /* File descriptor for TCP socket */
   bool connected_;         /* Connection state flag */
   int poll_interval_;      /* Polling interval for blocking operations (ms) */
+// Serialize request/response sequences to ensure no interleaving.
+  mutable std::mutex comms_mutex_;
 
   /*
    * Send a command string to the gripper.

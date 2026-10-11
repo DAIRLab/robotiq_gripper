@@ -121,6 +121,7 @@ bool RobotiqGripper::activate() {
     std::cerr << "Failed to activate gripper" << std::endl;
     return false;
   }
+  blockUntilStatus(RobotiqCommand::GOTO_STATUS, 0, false);
   blockUntilStatus(RobotiqCommand::GRIPPER_STATUS, 3);
   return true;
 }
@@ -252,6 +253,7 @@ bool RobotiqGripper::IsFaulted() const {
 
 // Private helper: Send command and receive response
 std::string RobotiqGripper::sendCommand(const std::string& command) const {
+  std::lock_guard<std::mutex> lock(comms_mutex_);
   if (send(socket_fd_, command.c_str(), command.length(), 0) < 0) {
     throw std::runtime_error("Failed to send command");
   }

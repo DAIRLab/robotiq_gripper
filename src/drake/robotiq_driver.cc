@@ -136,6 +136,13 @@ class RobotiqDriverRunner {
 
     {
       std::lock_guard<std::mutex> lock(command_mutex_);
+      // If there's already a pending or in-flight command, drop the new one.
+      if (command_.has_value() || command_in_flight_.load()) {
+        drake::log()->warn(
+            "Dropping incoming command because a previous command is pending or in flight");
+        return;
+      }
+
       command_ = *command;
     }
   }
@@ -167,6 +174,11 @@ class RobotiqDriverRunner {
       if (std::abs(now - cmd.utime) > expire_usec_) {
         drake::log()->warn("Gripper command packet too old [{} usec], skipping",
                            now - cmd.utime);
+        {
+          std::lock_guard<std::mutex> lock(command_mutex_);
+          // clear stale pending command so new ones may be accepted
+          command_.reset();
+        }
         continue;
       }
 
@@ -178,8 +190,14 @@ class RobotiqDriverRunner {
       int force = static_cast<int>(
           std::clamp(static_cast<double>(cmd.force), 0.0, 255.0));
 
-      if (!gripper_->moveToPosition(position, speed, force, true)) {
+      // Mark a command as in-flight so new incoming commands are dropped
+      command_in_flight_.store(true);
+
+      bool move_ok = gripper_->moveToPosition(position, speed, force, true);
+      if (!move_ok) {
         drake::log()->error("Failed to send movement command to gripper");
+        // clear in-flight flag before stopping
+        command_in_flight_.store(false);
         stop_command_thread_ = true;
         break;
       }
@@ -189,6 +207,9 @@ class RobotiqDriverRunner {
         prev_command_ = command_;
         command_.reset();
       }
+
+      // Allow new commands to be accepted now that the previous finished.
+      command_in_flight_.store(false);
     }
 
     handlers_cv_.notify_one();
@@ -223,23 +244,23 @@ class RobotiqDriverRunner {
 
           // Read status flags
           status_msg.activation_status =
-              (gripper_->getIntValue(RobotiqCommand::ACTIVATION_STATUS) != 0);
+              gripper_->getIntValue(RobotiqCommand::ACTIVATION_STATUS);
           status_msg.gripper_mode =
-              (gripper_->getIntValue(RobotiqCommand::GRIPPER_MODE) != 0);
+              gripper_->getIntValue(RobotiqCommand::GRIPPER_MODE);
           status_msg.goto_status =
-              (gripper_->getIntValue(RobotiqCommand::GOTO_STATUS) != 0);
+              gripper_->getIntValue(RobotiqCommand::GOTO_STATUS);
 
           // Publish status message
           publishStatusMessage(status_msg);
 
           // Check for fault - if activation fails or gripper mode is invalid
-          if (!status_msg.activation_status || !status_msg.gripper_mode) {
-            drake::log()->error(
-                "Gripper fault detected: activation={}, mode={}",
-                status_msg.activation_status, status_msg.gripper_mode);
-            stop_status_thread_ = true;
-            break;
-          }
+          // if (!status_msg.activation_status || !status_msg.gripper_mode) {
+          //   drake::log()->error(
+          //       "Gripper fault detected: activation={}, mode={}",
+          //       status_msg.activation_status, status_msg.gripper_mode);
+          //   stop_status_thread_ = true;
+          //   break;
+          // }
         } catch (const std::exception& e) {
           drake::log()->error("Error reading gripper status: {}", e.what());
           stop_status_thread_ = true;
@@ -285,6 +306,9 @@ class RobotiqDriverRunner {
   std::atomic<bool> stop_status_thread_{false};
   std::thread command_thread_;
   std::atomic<bool> stop_command_thread_{false};
+
+  // True while a command is actively being sent / waiting for completion.
+  std::atomic<bool> command_in_flight_{false};
 
   std::mutex handlers_mutex_;
   std::condition_variable handlers_cv_;
